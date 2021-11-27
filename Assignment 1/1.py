@@ -10,13 +10,12 @@ BENFORD = [30.1, 17.6, 12.5, 9.7, 7.9, 6.7, 5.8, 5.1, 4.6]
 
 # we create a function which output is the final counts, and the frequency of each count as a
 # percentage, are returned as lists to use in subsequent functions.
-def count_first_digit(df, data_str):  # TAKE AS AN ARGUMENT A STR-COLUMN NAME
-    mask = df[data_str] > 1.0
-    data = list(df[mask][data_str])
-    for i in range(len(data)):
-        while data[i] > 10:
-            data[i] = data[i] / 10
-    first_digits = [int(x) for x in sorted(data)]
+def count_first_digit(data):
+    digits = []
+    for i in data:
+        digits.append(str(i)[0])
+    
+    first_digits = [int(x) for x in sorted(digits)]
     unique = set(first_digits)  # a list with unique values of first_digit list
     data_count = []
     for i in unique:
@@ -51,10 +50,10 @@ def mad(data_count, expected_counts):
 
 if __name__ == "__main__":
     df = pd.read_csv("benford.csv", encoding="latin-1")
-    data_col = "Population"
+    data = df["Population"]
     # print(data)
 
-    total_count, data_count, data_percentage = count_first_digit(df, data_col)
+    total_count, data_count, data_percentage = count_first_digit(data)
     expected_counts = get_expected_counts(total_count)
 
     print("\nobserved counts = {}".format(data_count))
