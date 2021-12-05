@@ -127,5 +127,4 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-Assignment 3/Trustrank.py
 Assignment 3/Pagerank and Trustrank.gdoc
