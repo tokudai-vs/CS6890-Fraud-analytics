@@ -58,7 +58,7 @@ if __name__ == "__main__":
 
     print("\nobserved counts = {}".format(data_count))
     print("expected counts = {}".format(expected_counts), "\n")
-    print("First Digit Probabilities:")
+    print("Second Digit Probabilities:")
     for i in range(1, 10):
         print(
             "{}: observed: {:.3f}  expected: {:.3f}".format(
