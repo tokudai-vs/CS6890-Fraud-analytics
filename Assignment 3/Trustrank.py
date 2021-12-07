@@ -15,7 +15,11 @@ beta = 0.85
 
 
 with open("graph.txt", "r") as data_file:
+    count = 0
     for line in data_file:
+        if count>100:
+            continue
+        count+=1
         line_values = line.split(" ")
         a = int(line_values[0])
         b = int(line_values[1])
@@ -135,16 +139,20 @@ final_node_size = [
     for i, page_info in zip(range(30), sorted_page_rank_score_after_trustrank)
 ]
 
+try:
+    pos = nx.spring_layout(G, k=1, iterations=20)
+    nx.draw_networkx_edges(G, pos)
 
-pos = nx.spring_layout(G, k=1, iterations=20)
-nx.draw_networkx_edges(G, pos)
-nx.draw(
-    G,
-    pos,
-    node_size=final_node_size,
-    node_color="Blue",
-    edge_color=edge_colors,
-    edge_cmap=plt.cm.Reds,
-    with_labels=True,
-)
-pylab.show()
+    nx.draw(
+        G,
+        pos,
+        node_size=final_node_size,
+        node_color="Blue",
+        edge_color=edge_colors,
+        edge_cmap=plt.cm.Reds,
+        with_labels=True,
+    )
+    pylab.show()
+
+except:
+    print("Could not show graph")

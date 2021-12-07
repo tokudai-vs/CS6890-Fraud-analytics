@@ -18,10 +18,10 @@ class getGraph:
             edge_list = e_file.readlines()
 
         for edge in edge_list:
-            from_, to_ = edge.split(" ")
+            from_, to_ = edge.split("\t")
             from_, to_ = int(from_), int(to_[:-1])
             edges[from_].append(to_)
-
+        from itertools import islice
         return edges
 
 
@@ -68,18 +68,21 @@ class plotGraph:
         timer.add_callback(plt.close)
 
         pos = nx.shell_layout(Graph)
-        nx.draw_networkx_nodes(
-            Graph,
-            pos,
-            cmap=plt.get_cmap("jet"),
-            node_size=[node[1] * 10000 for node in nodes_to_draw],
-        )
-        nx.draw_networkx_labels(
-            Graph, pos, labels={node[0]: node[0] for node in nodes_to_draw}
-        )
-        nx.draw_networkx_edges(Graph, pos, arrows=True)
-        timer.start()
-        plt.show()
+        try:
+            nx.draw_networkx_nodes(
+                Graph,
+                pos,
+                cmap=plt.get_cmap("jet"),
+                node_size=[node[1] * 10000 for node in nodes_to_draw],
+            )
+            nx.draw_networkx_labels(
+                Graph, pos, labels={node[0]: node[0] for node in nodes_to_draw}
+            )
+            nx.draw_networkx_edges(Graph, pos, arrows=True)
+            timer.start()
+            plt.show()
+        except:
+            pass
 
     def plot(self, number_of_nodes, rank_vector):
         ranks = {node: rank for (node, rank) in enumerate(rank_vector)}
@@ -195,14 +198,14 @@ class PageRank:
             iterations += 1
 
         return final_rank_vector
+ 
 
-
-node_num = 8298
+node_num = 2394385
 beta = 0.85
 epsilon = 1e-6
 max_iterations = 20
 
-gg = getGraph("graph.txt")
+gg = getGraph("data.txt")
 edges = gg.get_connections()
 
 pr = PageRank(beta, edges, epsilon, max_iterations, node_num)
