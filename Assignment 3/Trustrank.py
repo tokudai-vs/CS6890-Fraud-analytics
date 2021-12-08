@@ -1,3 +1,13 @@
+###############################################################################################
+
+# Implementation of Trust Rank algorithm
+# Contributors:
+# Vishal Singh Yadav: CS20MTECH01001
+# Anilava Kundu: CS20MTECH01002
+# Kuldeep Gautam: CS20MTECH01004
+
+###############################################################################################
+
 import numpy as np
 import operator
 import networkx as nx

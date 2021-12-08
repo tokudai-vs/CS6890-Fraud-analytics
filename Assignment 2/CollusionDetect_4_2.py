@@ -1,3 +1,13 @@
+###############################################################################################
+
+# Implementation of Shared Nearest Neighbour Graph Clustering Algorithm to Detect Collusion sets
+# Contributors:
+# Vishal Singh Yadav: CS20MTECH01001
+# Anilava Kundu: CS20MTECH01002
+# Kuldeep Gautam: CS20MTECH01004
+
+###############################################################################################
+
 import pandas as pd
 import networkx as nx
 import sys
