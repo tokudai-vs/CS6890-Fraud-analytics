@@ -1,6 +1,6 @@
 ###############################################################################################
 
-# Implementation of Shared Nearest Neighbour Graph Clustering Algorithm to Detect Collusion sets
+# Implementation of Mutual Nearest Neighbour Graph Clustering Algorithm to Detect Collusion sets
 # Contributors:
 # Vishal Singh Yadav: CS20MTECH01001
 # Anilava Kundu: CS20MTECH01002
@@ -13,6 +13,7 @@ import networkx as nx
 import sys
 
 
+#Function to calculate all K-Nearest Neighbours
 def find_KNN(G, k):
 
     dict_kNN = {}
@@ -33,17 +34,14 @@ def find_KNN(G, k):
 
     return dict_kNN
 
-
+#Function to calculate mnv for a pair of clusters
 def calculateMNV(C1, C2, dict_kNN):
 
     mnv_list = []
     for v1 in C1:
         for v2 in C2:
             if v2 in dict_kNN[v1] and v1 in dict_kNN[v2]:
-                # print(v2,dict_kNN[v1])
-                # print(v1,dict_kNN[v2])
                 sum_mnv = dict_kNN[v1].index(v2) + 1 + dict_kNN[v2].index(v1) + 1
-                # print(sum_mnv)
                 mnv_list.append(sum_mnv)
             elif v2 in dict_kNN[v1] and v1 not in dict_kNN[v2]:
                 sum_mnv = dict_kNN[v1].index(v2) + 100
@@ -58,34 +56,39 @@ def calculateMNV(C1, C2, dict_kNN):
 
     return avg_mnv
 
-
+#Function that implements algorithm 4.2 from the paper
 def find_clusters(G, m, dict_kNN):
 
     vertices = G.nodes
 
     clusters = [[x] for x in vertices]
 
-    min_mnv = sys.maxsize
     min_c1 = None
     min_c2 = None
 
-    # while len(clusters) > m:
-    for x in clusters:
-        for y in clusters:
-            if x == y:
-                continue
-            mnv = calculateMNV(x, y, dict_kNN)
-            if mnv <= min_mnv:
-                min_mnv = mnv
-                min_c1 = x
-                min_c2 = y
+    MAX_MNV=200
 
-    print(min_mnv)
-    # min_c1_c2=min_c1+min_c2
-    # clusters.remove(min_c1)
-    # clusters.remove(min_c2)
-    # clusters.append(min_c1_c2)
+    while len(clusters) > m:
+        min_mnv = sys.maxsize
+        for x in clusters:
+            for y in clusters:
+                if x == y:
+                    continue
+                mnv = calculateMNV(x, y, dict_kNN)
+                if mnv <= min_mnv:
+                    min_mnv = mnv
+                    min_c1 = x
+                    min_c2 = y
+        
+        if min_mnv >= MAX_MNV:
+            break
 
+        min_c1_c2=min_c1+min_c2
+        clusters.remove(min_c1)
+        clusters.remove(min_c2)
+        clusters.append(min_c1_c2)
+        
+    print(clusters)
 
 if __name__ == "__main__":
 
@@ -93,8 +96,8 @@ if __name__ == "__main__":
 
     Graphtype = nx.DiGraph()
 
-    kt = 2
-    K = 4
+    kt = 2 
+    K = 4 # 4 Nearest neighbours
 
     G = nx.from_pandas_edgelist(
         df,
@@ -103,9 +106,8 @@ if __name__ == "__main__":
         edge_attr="Amount",
         create_using=Graphtype,
     )
-    # print(G.nodes)
 
     dict_kNN = find_KNN(G, K)
 
-    find_clusters(G, 5, dict_kNN)
+    find_clusters(G, len(G.nodes)-1, dict_kNN)
 
